@@ -12,6 +12,7 @@ https://drive.google.com/file/d/1j0lzD40VthaRUp9bANlf8ayFwbv1ELj0/view?usp=shari
 Than run:
 ```bash
 unzip dls_add_motion_blur_project.zip
+cd dls_add_motion_blur_project
 docker build -t streamlit-app .
 ```
 # Usage:
