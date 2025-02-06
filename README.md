@@ -6,7 +6,7 @@ The aim of the project is to try implement motion blur to a static image. So it 
 
 # Installation:
 
-Download an `.zip` archive from Google Drive (~2gb):
+Download a `.zip` archive from Google Drive (~2gb):
 https://drive.google.com/file/d/1j0lzD40VthaRUp9bANlf8ayFwbv1ELj0/view?usp=sharing
 
 Than run:
