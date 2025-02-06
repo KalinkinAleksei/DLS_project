@@ -19,31 +19,32 @@ docker build -t streamlit-app .
 ```bash
 docker run -p 8501:8501 streamlit-app
 ```
-# Pipeline
-1) Pretrained [DeepLab v3](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/):
+# Pipeline:
+**1) Pretrained [DeepLab v3](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/):**
    
-   Input: resized 3 channel input image
+   - **Input**: resized 3 channel input image
    
-   Output: segmentation maps for 21 classes
+   - **Output**: segmentation maps for 21 classes
    
-3) Segmentation model:
+**2) Segmentation model:**
    
-   Training data: [ReloBlur dataset](https://leiali.github.io/ReLoBlur_homepage/index.html)
+   - **Training data:** [ReloBlur dataset](https://leiali.github.io/ReLoBlur_homepage/index.html)
    
-   X: resized greyscale transformation of sharp image (from ReloBlur) concatinated with background class map from DeepLab v3
+   - **X:** 2-cannel array: 1-channel resized grayscale transformation of sharp image (from ReloBlur) + 1-channel background class map from DeepLab v3
    
-   y: blur segmentation map (from ReloBlur)
-5) pix2pix GAN:
+   - **y:** 1-channel blur segmentation map (from ReloBlur)
+     
+**3) pix2pix GAN:**
 
-   Generator:
+   - **Generator:**
 
-   X: 4 channel image: 3 RGB channels of resized sharp image (from ReloBlur) + 1 channel blur segmentation map (from segmentation model)
+     **X:** 4-channel array: 3-channel resized RGB sharp image (from ReloBlur) + 1-channel blur segmentation map (from segmentation model)
+
+     **y:** 3-channel RGB blur image (from ReloBlur)
    
-   y: 3 channel RGB blur image (from ReloBlur)
-   
-   Discriminator:
-   
-   X: 6 channel array: 3 channel RGB blur image (from Generator) + 3 channel RGB blur image (from ReloBlur) - ground truth
+   - **Discriminator:**
+
+     **X:** 6-channel array: 3-channel RGB blur image (from Generator) + 3-channel RGB blur image (from ReloBlur) - ground truth
    
 
 
