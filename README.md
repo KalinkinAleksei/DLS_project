@@ -13,11 +13,11 @@ Than run:
 ```bash
 unzip dls_add_motion_blur_project.zip
 cd dls_add_motion_blur_project
-docker build -t streamlit-app .
+docker build -t dls-blur-project .
 ```
 # Usage:
 ```bash
-docker run -p 8501:8501 streamlit-app
+docker run -p 8501:8501 dls-blur-project
 ```
 # Pipeline:
 **1) Pretrained [DeepLab v3](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/):**
