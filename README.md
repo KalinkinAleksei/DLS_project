@@ -45,7 +45,11 @@ docker run -p 8501:8501 streamlit-app
    - **Discriminator:**
 
      **X:** 6-channel array: 3-channel RGB blur image (from Generator) + 3-channel RGB blur image (from ReloBlur) - ground truth
-   
+
+# Training
+
+[GAN training Colab notebook](https://colab.research.google.com/drive/1hWyAqqE4jjXYNhmbz4Jlc_5J-sFnAvfi?usp=sharing)
+
 
 
 
