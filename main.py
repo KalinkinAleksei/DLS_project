@@ -138,7 +138,7 @@ class SegNet(nn.Module):
         d03 = F.relu(self.dec_bn03(self.dec_conv03(d02)))
 
         d10 = self.upsample1(d03, id2)
-        d11 = F.relu(self.dec_bn11(self.dec_conv11(d10)))
+        d11 = F.relu(self.dec_bn11(self.dec_conv11(d11)))
         d12 = F.relu(self.dec_bn12(self.dec_conv12(d11)))
         d13 = F.relu(self.dec_bn13(self.dec_conv13(d12)))
 
@@ -152,7 +152,7 @@ class SegNet(nn.Module):
 
         return d32
 
-seg_model = torch.load('seg_model.pth')
+seg_model = torch.load('seg_model.pth', map_location=torch.device('cpu'), weights_only=False)
 seg_model.cpu()
 seg_model.eval()
 
@@ -190,7 +190,7 @@ class UNetUp(nn.Module):
 class UNetGenerator(nn.Module):
     def __init__(self, input_channels=4, output_channels=3):
         super().__init__()
-        # Increased channel sizes by ~1.5x
+        
         self.down1 = UNetDown(input_channels, 192, normalize=False)
         self.down2 = UNetDown(192, 384)
         self.down3 = UNetDown(384, 768)
@@ -200,7 +200,6 @@ class UNetGenerator(nn.Module):
         self.down7 = UNetDown(1536, 1536, dropout=0.5)
         self.down8 = UNetDown(1536, 1536, normalize=False, dropout=0.5)
 
-        # Adjusted upsampling layers for increased channels
         self.up1 = UNetUp(1536, 1536, dropout=0.5)
         self.up2 = UNetUp(3072, 1536, dropout=0.5)
         self.up3 = UNetUp(3072, 1536, dropout=0.5)
@@ -234,7 +233,7 @@ class UNetGenerator(nn.Module):
 
         return self.final(u7)
     
-generator = torch.load('generator_v1.pth')
+generator = torch.load('generator.pth', map_location=torch.device('cpu'), weights_only=False)
 generator.cpu()
 generator.eval()
 
@@ -243,13 +242,13 @@ file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 if file is not None:
     image = imread(file)
     img_display = Image.fromarray(image)
-    st.image(img_display, caption='Input Image',use_container_width=True)
+    st.image(img_display, caption='Input Image')
 
     im = resize(image, (256, 256), mode='constant', anti_aliasing=False,)
     bg = get_background(im, deeplab)
     bg_normalized = (bg * 255).astype(np.uint8)
     bg_normalized = bg_normalized.squeeze()
-    st.image(bg_normalized, caption='Background by DeepLabv3',use_container_width=True)
+    st.image(bg_normalized, caption='Background by DeepLabv3')
     
     #Seg model
     im_grey = np.array([rgb2gray(im)])
@@ -257,7 +256,7 @@ if file is not None:
     mp = np.array([get_map(im_for_segmentation, seg_model)])
     mp_normalized = (mp * 255).astype(np.uint8)
     mp_normalized = mp_normalized.squeeze()
-    st.image(mp_normalized, caption='Possible blur segmentation',use_container_width=True)
+    st.image(mp_normalized, caption='Possible blur segmentation')
 
     #GAN
     image_final = np.transpose(im, (2, 0, 1))
@@ -267,5 +266,4 @@ if file is not None:
     result = pred.detach().numpy()
     result = result.squeeze().transpose(1, 2, 0)
     result = (result*255).astype(np.uint8)
-    st.image(result, caption='generated image',use_container_width=True)
-
+    st.image(result, caption='generated image')
